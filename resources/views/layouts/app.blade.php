@@ -107,9 +107,12 @@
 <body>
 
 <nav>
-    <a href="{{ url('/') }}">Головна</a>
-    <a href="{{ url('/about') }}">Про компанію</a>
-    <a href="{{ url('/contact') }}">Контакти</a>
+    <a href="{{ route('home') }}">Головна</a>
+    <a href="{{ route('landing') }}">Бета-тест</a>
+    <a href="{{ route('site.about') }}">Про компанію</a>
+    <a href="{{ route('site.contact') }}">Контакти</a>
+    <a href="{{ route('entry.form') }}">Форма</a>
+    <a href="{{ route('site.say') }}">Привіт</a>
 </nav>
 
 <main>
