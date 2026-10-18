@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\SiteController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\BetaTesterController;
 
 Route::get('/',
     [SiteController::class, 'index']
@@ -33,3 +34,11 @@ Route::get('/landing',
 Route::post('/landing',
     [SiteController::class, 'landingStore']
 )->name('landing.store');
+
+Route::resource('country',
+    CountryController::class
+);
+
+Route::resource('beta-testers',
+    BetaTesterController::class
+);
