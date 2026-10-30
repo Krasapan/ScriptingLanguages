@@ -3,6 +3,8 @@
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\BetaTesterController;
+use App\Http\Middleware\TrackVisit;
+use App\Http\Controllers\StatsController;
 
 Route::get('/',
     [SiteController::class, 'index']
@@ -42,3 +44,11 @@ Route::resource('country',
 Route::resource('beta-testers',
     BetaTesterController::class
 );
+
+Route::get('/stats',
+    [StatsController::class, 'pages']
+)->name('stats.pages');
+
+Route::get('/stats/detail',
+    [StatsController::class, 'detail']
+)->name('stats.detail');

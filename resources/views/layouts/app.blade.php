@@ -187,6 +187,7 @@
     <a href="{{ route('entry.form') }}">Форма</a>
     <a href="{{ route('site.say') }}">Привіт</a>
     <a href="{{ route('country.index') }}">Країни</a>
+    <a href="{{ route('stats.pages') }}">Статистика</a>
 </nav>
 
 <main>
@@ -194,7 +195,7 @@
 </main>
 
 <footer>
-    &copy; {{ date('Y') }} Krasapan's Games
+    &copy; {{ date('Y') }} Krasapan's Games | Кучеров Іван РІ-п51
 </footer>
 
 </body>
