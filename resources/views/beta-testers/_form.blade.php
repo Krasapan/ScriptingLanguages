@@ -22,8 +22,39 @@
     @error('platform')<p class="error" style="color: red;">{{ $message }}</p>@enderror
 </div>
 
-<div>
-    <label for="experience">Ігровий досвід / Коментар</label>
-    <textarea id="experience" name="experience" rows="3">{{ old('experience', $betaTester->experience ?? '') }}</textarea>
-    @error('experience')<p class="error" style="color: red;">{{ $message }}</p>@enderror
-</div>
+<hr style="margin: 20px 0;">
+<h3>Досвід тестувальника (Локалізації)</h3>
+
+{{-- Динамічний цикл по мовах --}}
+@foreach(\App\Models\BetaTester::AVAILABLE_LOCALES as $localeCode => $localeName)
+    @php
+        // Вважаємо 'uk' основною мовою, яка зберігається в таблиці beta_testers
+        $isPrimary = ($localeCode === 'uk');
+
+        // Якщо мова основна - пишемо в поле 'experience', інакше - в масив 'translations'
+        $fieldName = $isPrimary ? 'experience' : "translations[{$localeCode}]";
+
+        // Отримуємо значення для поля
+        $fieldValue = $isPrimary
+            ? old('experience', $betaTester->experience ?? '')
+            : old("translations.{$localeCode}", $betaTester->translations->where('locale', $localeCode)->first()?->experience ?? '');
+
+        // Формуємо підпис
+        $labelText = $isPrimary ? $localeName . ' (Основна мова)' : $localeName;
+    @endphp
+
+    <div style="margin-bottom: 15px;">
+        <label for="experience_{{ $localeCode }}">{{ $labelText }}</label>
+        <textarea
+            id="experience_{{ $localeCode }}"
+            name="{{ $fieldName }}"
+            rows="3"
+            style="width: 100%;"
+        >{{ $fieldValue }}</textarea>
+
+        {{-- Виводимо помилки для конкретного поля --}}
+        @error($isPrimary ? 'experience' : "translations.{$localeCode}")
+        <p class="error" style="color: red;">{{ $message }}</p>
+        @enderror
+    </div>
+@endforeach
