@@ -5,6 +5,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\BetaTesterController;
 use App\Http\Middleware\TrackVisit;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\BlogController;
 
 Route::get('/',
     [SiteController::class, 'index']
@@ -52,3 +53,10 @@ Route::get('/stats',
 Route::get('/stats/detail',
     [StatsController::class, 'detail']
 )->name('stats.detail');
+
+Route::get('/blog/admin',
+    [BlogController::class, 'admin'])
+->name('blog.admin');
+
+Route::resource('blog',
+    BlogController::class);

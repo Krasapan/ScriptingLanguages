@@ -173,6 +173,42 @@
 
             margin-top: auto;
         }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+        .blog-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        .blog-card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .blog-card-body {
+            padding: 16px;
+        }
+        .blog-category {
+            font-size: 13px;
+            color: #2563eb;
+            text-transform: uppercase;
+        }
+        .blog-meta {
+            font-size: 13px;
+            color: #666;
+            margin: 5px 0 10px;
+        }
     </style>
 </head>
 
@@ -188,6 +224,8 @@
     <a href="{{ route('site.say') }}">Привіт</a>
     <a href="{{ route('country.index') }}">Країни</a>
     <a href="{{ route('stats.pages') }}">Статистика</a>
+    <a href="{{ route('blog.index') }}">Блог</a>
+    <a href="{{ route('blog.admin') }}">Адмінка</a>
 </nav>
 
 <main>

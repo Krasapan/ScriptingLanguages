@@ -1,12 +1,19 @@
 @extends('layouts.app')
 @section('title', $betaTester->name)
 @section('content')
+
+    <div style="margin-bottom: 20px;">
+        Мова:
+        <a href="{{ request()->fullUrlWithQuery(['lang' => 'uk']) }}">Українська</a> |
+        <a href="{{ request()->fullUrlWithQuery(['lang' => 'en']) }}">English</a>
+    </div>
+
     <h1>Картка тестувальника: {{ $betaTester->name }}</h1>
 
     <p><strong>Email:</strong> {{ $betaTester->email }}</p>
     <p><strong>Вік:</strong> {{ $betaTester->age }}</p>
     <p><strong>Платформа:</strong> {{ $betaTester->platform }}</p>
-    <p><strong>Досвід:</strong> {{ $betaTester->experience ?? 'Не вказано' }}</p>
+    <p><strong>Досвід:</strong> {{ $betaTester->getTranslatedExperience($lang) }}</p>
 
     <p>
         <a href="{{ route('beta-testers.edit', $betaTester) }}">Редагувати</a> |
