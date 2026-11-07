@@ -44,7 +44,7 @@
             <th style="padding: 12px; border: 1px solid #dee2e6;">Email</th>
             <th style="padding: 12px; border: 1px solid #dee2e6; width: 80px;">Вік</th>
             <th style="padding: 12px; border: 1px solid #dee2e6; width: 120px;">Платформа</th>
-            {{-- ДОДАНО: Заголовок для нової колонки --}}
+            <th style="padding: 12px; border: 1px solid #dee2e6; width: 100px; text-align: center;">Ігор</th>
             <th style="padding: 12px; border: 1px solid #dee2e6;">Досвід</th>
             <th style="padding: 12px; border: 1px solid #dee2e6; width: 100px;">Дії</th>
         </tr>
@@ -62,7 +62,13 @@
                 <td style="padding: 12px; border: 1px solid #dee2e6;">{{ $tester->age }}</td>
                 <td style="padding: 12px; border: 1px solid #dee2e6;">{{ $tester->platform }}</td>
 
-                {{-- ДОДАНО: Виведення перекладу всередині циклу --}}
+                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
+                    <span style="display: inline-block; padding: 4px 8px;
+                    background: #e9ecef; border-radius: 12px; font-weight: bold; font-size: 14px;">
+                        {{ $tester->games_count }}
+                    </span>
+                </td>
+
                 <td style="padding: 12px; border: 1px solid #dee2e6;">
                     {{ $tester->getTranslatedExperience($lang) }}
                 </td>
@@ -75,7 +81,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="7" style="padding: 20px; text-align: center; color: #777;">
+                <td colspan="8" style="padding: 20px; text-align: center; color: #777;">
                     Тестувальників не знайдено.
                 </td>
             </tr>
