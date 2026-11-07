@@ -49,12 +49,33 @@
             id="experience_{{ $localeCode }}"
             name="{{ $fieldName }}"
             rows="3"
-            style="width: 100%;"
+            style="width: 100%;
+                   background-color: #f8f9fa;
+                   border: 1px solid #ced4da;
+                   color: #333;
+                   padding: 10px;
+                   border-radius: 4px;
+                   box-sizing: border-box;
+                   font-family: inherit;"
         >{{ $fieldValue }}</textarea>
 
-        {{-- Виводимо помилки для конкретного поля --}}
         @error($isPrimary ? 'experience' : "translations.{$localeCode}")
         <p class="error" style="color: red;">{{ $message }}</p>
         @enderror
     </div>
 @endforeach
+
+<hr style="margin: 20px 0;">
+<h3>Призначені ігри</h3>
+
+<div style="margin-bottom: 15px;">
+    <label for="games">Оберіть ігри для тестування</label>
+    <select id="games" name="games[]" multiple style="width: 100%;">
+        @foreach ($games as $id => $title)
+            <option value="{{ $id }}" @selected(in_array($id, old('games', $selectedGames ?? [])))>
+                {{ $title }}
+            </option>
+        @endforeach
+    </select>
+    @error('games') <p class="error" style="color:red">{{ $message }}</p> @enderror
+</div>
