@@ -31,4 +31,10 @@ class BetaTester extends Model
         $translation = $this->translations->where('locale', $lang)->first();
         return $translation ? $translation->experience : ($this->experience ?? '');
     }
+
+    public function games(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Game::class,
+            'beta_tester_game', 'beta_tester_id', 'game_id');
+    }
 }

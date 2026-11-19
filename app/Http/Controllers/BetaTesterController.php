@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BetaTesterRequest;
 use App\Models\BetaTester;
 use Illuminate\Http\Request;
+use App\Models\Game;
+use Illuminate\Support\Arr;
 
 class BetaTesterController extends Controller
 {
@@ -17,30 +19,33 @@ class BetaTesterController extends Controller
             $query->where('age', $request->age);
         }
 
-        $betaTesters = $query->with('translations')->orderBy('name')->paginate(5)->withQueryString();
+        $betaTesters = $query->with('translations')
+            ->withCount('games')
+            ->orderBy('name')
+            ->paginate(5)
+            ->withQueryString();
 
         return view('beta-testers.index', compact('betaTesters', 'lang'));
     }
 
     public function create()
     {
-        return view('beta-testers.create');
+        return view('beta-testers.create', [
+            'games' => Game::pluck('title', 'game_id'),
+            'selectedGames' => [],
+        ]);
     }
 
     public function store(BetaTesterRequest $request)
     {
-        $betaTester = BetaTester::create($request->validated());
+        $data = $request->validated();
+        $games = $data['games'] ?? [];
 
-        if ($request->has('translations')) {
-            foreach ($request->input('translations') as $locale => $text) {
-                if (!empty($text)) {
-                    $betaTester->translations()->create([
-                        'locale' => $locale,
-                        'experience' => $text,
-                    ]);
-                }
-            }
-        }
+        // Створюємо тестувальника без масиву ігор
+        $betaTester = BetaTester::create(Arr::except($data, ['games']));
+
+        // Синхронізуємо зв'язки
+        $betaTester->games()->sync($games);
 
         return redirect()->route('beta-testers.index');
     }
@@ -48,35 +53,42 @@ class BetaTesterController extends Controller
     public function show(Request $request, BetaTester $betaTester)
     {
         $lang = $request->query('lang', 'uk');
-        // Завантажуємо переклади для конкретного тестувальника
-        $betaTester->load('translations');
+        // Завантажуємо гру та переклади
+        $betaTester->load(['translations', 'games']);
 
         return view('beta-testers.show', compact('betaTester', 'lang'));
     }
 
     public function edit(BetaTester $betaTester)
     {
-        // ДОДАНО: завантажуємо переклади, щоб форма могла їх відобразити
-        $betaTester->load('translations');
+        $betaTester->load(['translations', 'games']);
 
-        return view('beta-testers.edit', compact('betaTester'));
+        return view('beta-testers.edit', [
+            'betaTester' => $betaTester,
+            'games' => Game::pluck('title', 'game_id'),
+            'selectedGames' => $betaTester->games->pluck('game_id')->all(),
+        ]);
     }
 
     public function update(BetaTesterRequest $request, BetaTester $betaTester)
     {
-        $betaTester->update($request->validated());
+        $data = $request->validated();
+        $games = $data['games'] ?? [];
 
+        // Оновлюємо дані тестувальника без ігор
+        $betaTester->update(Arr::except($data, ['games']));
+
+        // Синхронізуємо зв'язки
+        $betaTester->games()->sync($games);
+
+        // Логіка оновлення перекладів (з попередньої лаби)
         if ($request->has('translations')) {
             foreach ($request->input('translations') as $locale => $text) {
-                // Якщо текст не порожній - оновлюємо або створюємо
                 if (!empty($text)) {
                     $betaTester->translations()->updateOrCreate(
-                        ['locale' => $locale], // Умова пошуку
-                        ['experience' => $text] // Дані для оновлення/створення
+                        ['locale' => $locale],
+                        ['experience' => $text]
                     );
-                } else {
-                    // (Опціонально) Якщо поле очистили, можна видалити переклад
-                    $betaTester->translations()->where('locale', $locale)->delete();
                 }
             }
         }

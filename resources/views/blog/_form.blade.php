@@ -28,3 +28,15 @@
     <textarea id="text" name="text" rows="5">{{ old('text', $blog->text ?? '') }}</textarea>
     @error('text') <p class="error" style="color:red">{{ $message }}</p> @enderror
 </div>
+
+<div style="margin-top: 15px;">
+    <label for="filters">Мітки (кілька значень)</label>
+    <select id="filters" name="filters[]" multiple style="width: 100%;">
+        @foreach ($filters as $id => $name)
+            <option value="{{ $id }}" @selected(in_array($id, old('filters', $selected ?? [])))>
+                {{ $name }}
+            </option>
+        @endforeach
+    </select>
+    @error('filters') <p class="error" style="color:red">{{ $message }}</p> @enderror
+</div>

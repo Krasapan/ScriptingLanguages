@@ -21,6 +21,8 @@ class BetaTesterRequest extends FormRequest
             'age' => ['required', 'integer', 'min:12', 'max:100'],
             'platform' => ['required', 'string', 'max:100'],
             'experience' => ['nullable', 'string', 'max:1000'],
+            'games' => ['sometimes', 'array'],
+            'games.*' => ['integer', 'distinct', 'exists:games,game_id'],
             'translations' => ['nullable', 'array'],
             'translations.*' => ['nullable', 'string', 'max:1000'],
         ];

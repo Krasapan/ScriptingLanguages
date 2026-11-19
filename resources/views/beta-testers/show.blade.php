@@ -15,6 +15,22 @@
     <p><strong>Платформа:</strong> {{ $betaTester->platform }}</p>
     <p><strong>Досвід:</strong> {{ $betaTester->getTranslatedExperience($lang) }}</p>
 
+    <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #eee;">
+        <h3 style="margin-top: 0;">Призначені ігри:</h3>
+        @if($betaTester->games->isNotEmpty())
+            <ul style="margin: 0; padding-left: 20px;">
+                @foreach($betaTester->games as $game)
+                    <li>
+                        <strong>{{ $game->title }}</strong>
+                        ({{ $game->genre }})
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <p style="margin: 0; color: #777;">Тестувальник ще не призначений на жодну гру.</p>
+        @endif
+    </div>
+
     <p>
         <a href="{{ route('beta-testers.edit', $betaTester) }}">Редагувати</a> |
         <a href="{{ route('beta-testers.index') }}">Повернутися до списку</a>
