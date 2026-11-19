@@ -3,29 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BetaTesterRequest;
+use App\Queries\BetaTesterFilter;
 use App\Models\BetaTester;
-use Illuminate\Http\Request;
 use App\Models\Game;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+
 
 class BetaTesterController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, BetaTesterFilter $filter)
     {
         $lang = $request->query('lang', 'uk');
-        $query = BetaTester::query();
 
-        if ($request->filled('age')) {
-            $query->where('age', $request->age);
-        }
+        // Валідація параметрів пошуку
+        $input = $request->validate([
+            'name' => ['nullable', 'string', 'max:255'],
+            'gameTitle' => ['nullable', 'string', 'max:150'],
+            'game_id' => ['nullable', 'integer', 'exists:games,game_id'],
+            'sort' => ['nullable', 'string', 'max:30'],
+        ]);
 
-        $betaTesters = $query->with('translations')
-            ->withCount('games')
-            ->orderBy('name')
+        // Застосування фільтрів та пагінація
+        $betaTesters = $filter->apply($input)
             ->paginate(5)
-            ->withQueryString();
+            ->withQueryString(); // Зберігає параметри пошуку при переході між сторінками
 
-        return view('beta-testers.index', compact('betaTesters', 'lang'));
+        // Список усіх ігор для випадаючого списку
+        $games = Game::pluck('title', 'game_id');
+
+        return view('beta-testers.index', compact('betaTesters', 'lang', 'games'));
     }
 
     public function create()
