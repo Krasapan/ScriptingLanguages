@@ -1,0 +1,19 @@
+{
+    "Log in": "Увійти",
+    "Register": "Зареєструватися",
+    "Email": "Електронна пошта",
+    "Password": "Пароль",
+    "Confirm Password": "Підтвердіть пароль",
+    "Name": "Ім'я",
+    "Remember me": "Запам’ятати мене",
+    "Forgot your password?": "Забули пароль?",
+    "Already registered?": "Вже зареєстровані?",
+    "Reset Password": "Скинути пароль",
+    "Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.": "Дякуємо за реєстрацію! Перш ніж почати, підтвердіть свою електронну адресу, перейшовши за посиланням у листі.",
+    "A new verification link has been sent to the email address you provided during registration.": "Нове посилання для підтвердження надіслано на вашу пошту.",
+    "Resend Verification Email": "Надіслати лист ще раз",
+    "Profile": "Профіль",
+    "Log Out": "Вийти",
+    "Dashboard": "Панель управління",
+    "You're logged in!": "Ви успішно увійшли в систему!"
+}

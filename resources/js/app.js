@@ -4,6 +4,10 @@ import select2 from 'select2';
 import 'select2/dist/css/select2.css';
 import duallistbox from 'bootstrap4-duallistbox';
 import 'bootstrap4-duallistbox/dist/bootstrap-duallistbox.css';
+import Alpine from 'alpinejs';
+
+window.Alpine = Alpine;
+Alpine.start();
 
 window.$ = window.jQuery = $;
 select2(window, $);
