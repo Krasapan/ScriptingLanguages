@@ -218,16 +218,60 @@
 
 <nav>
     <a href="{{ route('home') }}">Головна</a>
-    <a href="{{ route('landing') }}">Бета-тест</a>
-    <a href="{{ route('beta-testers.index') }}">Бета-тестувальники</a>
+    <a href="{{ route('blog.index') }}">Блог</a>
     <a href="{{ route('site.about') }}">Про компанію</a>
     <a href="{{ route('site.contact') }}">Контакти</a>
-    <a href="{{ route('entry.form') }}">Форма</a>
-    <a href="{{ route('site.say') }}">Привіт</a>
-    <a href="{{ route('country.index') }}">Країни</a>
-    <a href="{{ route('stats.pages') }}">Статистика</a>
-    <a href="{{ route('blog.index') }}">Блог</a>
-    <a href="{{ route('blog.admin') }}">Адмінка</a>
+
+    @auth
+        <a href="{{ route('dashboard') }}">Особистий кабінет</a>
+        <a href="{{ route('blog.admin') }}">Адмінка блогу</a>
+        <a href="{{ route('beta-testers.index') }}">Бета-тестери</a>
+        <a href="{{ route('filters.index') }}">Мітки</a>
+        <a href="{{ route('stats.pages') }}">Статистика</a>
+    @endauth
+
+    {{-- Блок з мовою та профілем, притиснутий до правого краю --}}
+    <div style="margin-left: auto; display: flex; align-items: center; gap: 15px;">
+
+        {{-- Перемикач мов --}}
+        @php
+            $currentLang = app()->getLocale();
+            $locales = ['uk' => 'Українська', 'en' => 'English', 'fr' => 'Français'];
+        @endphp
+        <form method="GET" action="{{ url()->current() }}" style="margin: 0;">
+            {{-- Зберігаємо всі поточні параметри (фільтри, пошук, пагінацію) --}}
+            @foreach(request()->except('lang') as $key => $value)
+                @if(is_array($value))
+                    @foreach($value as $k => $v)
+                        <input type="hidden" name="{{ $key }}[{{ $k }}]" value="{{ $v }}">
+                    @endforeach
+                @else
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                @endif
+            @endforeach
+
+            <select name="lang" onchange="this.form.submit()" style="background: #1e293b; color: white; border: 1px solid #475569; padding: 4px 8px; border-radius: 4px; font-size: 14px; cursor: pointer;">
+                @foreach($locales as $code => $name)
+                    <option value="{{ $code }}" @selected($currentLang == $code)>{{ $name }}</option>
+                @endforeach
+            </select>
+        </form>
+
+        @auth
+            <span style="color: #a0aec0; font-size: 14px; border-left: 1px solid #475569; padding-left: 15px;">
+                {{ auth()->user()->name }}
+            </span>
+            <form method="POST" action="{{ route('logout') }}" style="display: inline-block; margin: 0;">
+                @csrf
+                <button type="submit" style="background: none; border: none; color: #eeeeee; cursor: pointer; font-size: 14px; font-weight: 300; padding: 0;">
+                    Вийти
+                </button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" style="border-left: 1px solid #475569; padding-left: 15px;">Увійти</a>
+            <a href="{{ route('register') }}">Реєстрація</a>
+        @endauth
+    </div>
 </nav>
 
 <main>
